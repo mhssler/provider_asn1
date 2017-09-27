@@ -54,8 +54,7 @@ io:format(user, "~w:~w:~w ==>~n~p~n", [?MODULE, ?LINE, ?FUNCTION_NAME, CompileOp
     end.
 
 -spec do(rebar_state:t()) -> {ok, rebar_state:t()} | {error, string()}.
-do(PreState) ->
-    State = resolve_special_args(PreState),
+do(State) ->
 %% io:format(user, "~w:~w:~w ==>~n~p~n", [?MODULE, ?LINE, ?FUNCTION_NAME, State]),
 
 
@@ -70,7 +69,8 @@ do(PreState) ->
     lists:foreach(fun (App) -> process_app(State, App) end, AllApps),
     {ok, State}.
 
-process_app(State, AppPath) ->
+process_app(PreState, AppPath) ->
+    State = resolve_special_args(PreState),
     ASNPath = filename:join(AppPath, "asn1"),
     GenPath = filename:join(AppPath, "asngen"),
     IncludePath = filename:join(AppPath, "include"),
