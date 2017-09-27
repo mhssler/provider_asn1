@@ -42,6 +42,8 @@ init(State) ->
 resolve_special_args(PreState) ->
     NewState = resolve_args(PreState, ?DEFAULTS),
     CompileOpts = get_arg(NewState, compile_opts),
+io:format(user, "~w:~w:~w ==>~n~p~n", [?MODULE, ?LINE, ?FUNCTION_NAME, CompileOpts]),
+
     if
         is_binary(CompileOpts) ->
             NewCompileOpts = lists:map(fun(X) ->
@@ -54,6 +56,8 @@ resolve_special_args(PreState) ->
 -spec do(rebar_state:t()) -> {ok, rebar_state:t()} | {error, string()}.
 do(PreState) ->
     State = resolve_special_args(PreState),
+%% io:format(user, "~w:~w:~w ==>~n~p~n", [?MODULE, ?LINE, ?FUNCTION_NAME, State]),
+
 
     Apps = lists:map(fun (App) -> rebar_app_info:dir(App) end,
                      rebar_state:project_apps(State)),
@@ -102,6 +106,8 @@ generate_asn(State, Path, AsnFile) ->
     rebar_api:info("Generating ASN.1 files.", []),
     Args = get_args(State),
     verbose_out(State, "Args: ~p", [Args]),
+io:format(user, "~w:~w:~w ==>~n~p~n", [?MODULE, ?LINE, ?FUNCTION_NAME, Args]),
+
     Encoding = proplists:get_value(encoding, Args),
     CompileArgs =
         case proplists:get_value(verbose, Args) of

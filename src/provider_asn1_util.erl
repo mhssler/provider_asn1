@@ -12,6 +12,7 @@
          set_arg/3]).
 
 verbose_out(State, FormatString, Args)->
+    io:format(user, FormatString ++ "~n", Args),
     CommArgs = get_args(State),
     case proplists:get_value(verbose, CommArgs) of
         true ->
@@ -49,6 +50,8 @@ delete_file(State, In, File) ->
 resolve_args(State, Defaults) ->
     {PArgs, _} = rebar_state:command_parsed_args(State),
     Config = rebar_state:get(State, asn1_args, []),
+    io:format(user, "~w:~w:~w ==>~n~p~n", [?MODULE, ?LINE, ?FUNCTION_NAME, Config]),
+
 
     PArgsMap = maps:from_list(PArgs),
     ConfigMap = maps:from_list(Config),
@@ -57,6 +60,7 @@ resolve_args(State, Defaults) ->
     % Defaults overridden by Config overridden by PArgs (command-line)
     ResolvedMap = maps:merge(maps:merge(DefaultsMap, ConfigMap), PArgsMap),
     ResolvedArgs = maps:to_list(ResolvedMap),
+    io:format(user, "~w:~w:~w ==>~n~p~n", [?MODULE, ?LINE, ?FUNCTION_NAME, ResolvedArgs]),
     rebar_state:set(State, asn1_args, ResolvedArgs).
 
 get_args(State) ->
